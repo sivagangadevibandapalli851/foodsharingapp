@@ -125,7 +125,7 @@ footer{text-align:center;padding:35px 15px;background:#e4f0df;margin-top:45px;fo
   <p>Share kindness. One meal at a time.</p>
 </footer>
 
-<div class="modal" id="foodModal">
+<div class="modal" id="foodmodal">
  <div class="modal-box">
   <button class="close" onclick="closeForm()">✕</button>
   <h2>🍲 Share Your Food</h2>
