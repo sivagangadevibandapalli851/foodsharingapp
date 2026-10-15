@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShareBite | Share Food, Spread Love</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --green:#438b61; --dark:#203b2c; --cream:#fffaf0;
+  --pink:#ffe3df; --mint:#e4f3df; --orange:#ffbd83;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Poppins,sans-serif;background:var(--cream);color:var(--dark)}
+header{display:flex;justify-content:space-between;align-items:center;padding:17px 7%;background:#fffdf8;position:sticky;top:0;z-index:5;box-shadow:0 3px 20px #30452a0c}
+.logo{font-size:23px;font-weight:800;color:var(--green)}
+nav{display:flex;gap:20px;align-items:center}
+button,a{font-family:inherit;cursor:pointer}
+nav a{text-decoration:none;color:var(--dark);font-size:14px}
+.btn{border:0;border-radius:12px;padding:12px 18px;background:var(--green);color:white;font-weight:600}
+.btn:hover{filter:brightness(.92);transform:translateY(-1px)}
+.btn-light{background:var(--mint);color:var(--dark)}
+.hero{margin:25px auto;width:86%;padding:40px;border-radius:28px;background:linear-gradient(120deg,#ffe9df,#f5f8d9,#dff2df);display:flex;justify-content:space-between;align-items:center;gap:20px;overflow:hidden}
+.hero h1{font-size:clamp(30px,5vw,54px);line-height:1.15;margin:10px 0}
+.hero p{max-width:490px;line-height:1.8}
+.hero-art{font-size:clamp(90px,16vw,175px);filter:drop-shadow(0 12px 10px #6c875b22)}
+.pill{display:inline-block;background:white;padding:8px 14px;border-radius:50px;font-size:12px;color:var(--green);font-weight:700}
+.search{display:flex;gap:8px;max-width:500px;margin-top:22px}
+.search input{flex:1;min-width:0}
+input,textarea,select{width:100%;padding:13px;border:1px solid #deded1;border-radius:11px;background:white;font:inherit;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--green)}
+.section{width:86%;margin:35px auto}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.section h2{font-size:25px;margin-bottom:7px}
+.muted{color:#718071;font-size:13px}
+.categories{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.chip{border:1px solid #e3e8dc;background:white;border-radius:30px;padding:9px 15px;color:var(--dark)}
+.chip.active{background:var(--green);color:white}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.card{background:white;border-radius:20px;overflow:hidden;border:1px solid #e9eadf;box-shadow:0 6px 20px #33472b09;transition:.2s}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 25px #33472b15}
+.food-img{height:155px;background:linear-gradient(135deg,#ffe6d4,#e2f2d9);display:flex;justify-content:center;align-items:center;font-size:75px;position:relative}
+.food-img img{width:100%;height:100%;object-fit:cover}
+.tag{position:absolute;top:10px;left:10px;background:#fff;padding:5px 9px;border-radius:20px;font-size:11px;color:var(--green);font-weight:700}
+.card-body{padding:15px}
+.card h3{margin:0 0 9px;font-size:16px}
+.info{font-size:12px;color:#687568;margin:6px 0}
+.card-actions{display:flex;gap:7px;margin-top:13px}
+.card-actions button{flex:1;font-size:12px;padding:9px 5px}
+.why{background:var(--mint);padding:30px;border-radius:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:center}
+.why div{padding:10px}
+.why span{font-size:32px}
+.why h3{font-size:16px}
+footer{text-align:center;padding:35px 15px;background:#e4f0df;margin-top:45px;font-size:13px}
+.modal{display:none;position:fixed;inset:0;background:#17291dc9;z-index:10;align-items:center;justify-content:center;padding:15px}
+.modal.show{display:flex}
+.modal-box{background:var(--cream);border-radius:24px;padding:25px;width:100%;max-width:500px;max-height:90vh;overflow:auto}
+.modal-box h2{margin-top:0}
+.field{margin:13px 0}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+.form-actions{display:flex;gap:10px;margin-top:20px}
+.form-actions button{flex:1}
+.close{float:right;background:var(--pink);border:0;border-radius:50%;width:34px;height:34px}
+.empty{text-align:center;padding:45px 10px;grid-column:1/-1}
+.notice{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--dark);color:white;padding:13px 22px;border-radius:15px;display:none;z-index:20;max-width:90%;text-align:center}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero,.section{width:92%}.hero{padding:25px}.hero-art{font-size:90px}header{padding:15px 4%}nav{gap:10px}nav a{font-size:12px}.why{grid-template-columns:1fr}}
+@media(max-width:480px){.hero-art{display:none}.hero{padding:25px 20px}.grid{gap:10px}.food-img{height:120px;font-size:55px}.card-body{padding:11px}.card h3{font-size:14px}.section h2{font-size:21px}nav a:nth-child(3){display:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🥗 ShareBite</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#foods">Explore Food</a>
+    <a href="#about">About</a>
+    <button class="btn" onclick="openForm()">＋ Share Food</button>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <div>
+    <span class="pill">🌱 GOOD FOOD. GOOD HEART.</span>
+    <h1>Share More.<br>Waste Less. 💚</h1>
+    <p>Have extra food? Someone nearby might need it. Share your food and make somebody's day a little brighter.</p>
+    <div class="search">
+      <input id="search" placeholder="🔍 Search food or location..." oninput="renderFoods()">
+      <button class="btn" onclick="document.getElementById('foods').scrollIntoView({behavior:'smooth'})">Explore</button>
+    </div>
+  </div>
+  <div class="hero-art">🥕🧺</div>
+</section>
+
+<section class="section">
+  <div class="categories">
+    <button class="chip active" onclick="setCategory('All',this)">🍀 All Food</button>
+    <button class="chip" onclick="setCategory('Meals',this)">🍱 Meals</button>
+    <button class="chip" onclick="setCategory('Fruits',this)">🍎 Fruits</button>
+    <button class="chip" onclick="setCategory('Snacks',this)">🥪 Snacks</button>
+    <button class="chip" onclick="setCategory('Other',this)">🥛 Other</button>
+  </div>
+</section>
+
+<section class="section" id="foods">
+  <div class="section-head">
+    <div><h2>Freshly Shared ✨</h2><p class="muted">Good food deserves a second chance.</p></div>
+    <span class="pill" id="count">0 food posts</span>
+  </div>
+  <div class="grid" id="foodGrid"></div>
+</section>
+
+<section class="section" id="about">
+  <div class="why">
+    <div><span>🥗</span><h3>Save Good Food</h3><p class="muted">Give extra food a useful purpose.</p></div>
+    <div><span>🤝</span><h3>Help Your Community</h3><p class="muted">Connect food donors with people in need.</p></div>
+    <div><span>🌍</span><h3>Care for Our Planet</h3><p class="muted">Take one small step towards less waste.</p></div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">🥗 ShareBite</div>
+  <p>Made with 💚 for a world where food is shared, not wasted.</p>
+  <p>Share kindness. One meal at a time.</p>
+</footer>
+
+<div class="modal" id="foodModal">
+ <div class="modal-box">
+  <button class="close" onclick="closeForm()">✕</button>
+  <h2>🍲 Share Your Food</h2>
+  <p class="muted">Every meal shared is kindness multiplied.</p>
+  <form id="foodForm">
+   <div class="field"><label>Food name *</label><input name="name" placeholder="e.g. Vegetable rice" required maxlength="70"></div>
+   <div class="field"><label>Food category *</label>
+    <select name="category"><option>Meals</option><option>Fruits</option><option>Snacks</option><option>Other</option></select>
+   </div>
+   <div class="field"><label>Food description</label><textarea name="description" placeholder="Tell us about the food..." rows="3" maxlength="300"></textarea></div>
+   <div class="field"><label>Quantity *</label><input name="quantity" placeholder="e.g. 5 meal boxes" required maxlength="60"></div>
+   <div class="field"><label>Pickup location *</label><input name="location" placeholder="Area / college / street" required maxlength="120"></div>
+   <div class="field"><label>Contact details (optional)</label><input name="contact" placeholder="Phone or email" maxlength="100"></div>
+   <div class="field"><label>Available until *</label><input name="expiry" type="datetime-local" required></div>
+   <div class="field"><label>Food picture (optional)</label><input name="photo" type="file" accept="image/*"></div>
+   <div class="form-actions">
+    <button type="button" class="btn btn-light" onclick="closeForm()">Cancel</button>
+    <button type="submit" class="btn">💚 Post Food</button>
+   </div>
+  </form>
+ </div>
+</div>
+
+<div class="notice" id="notice"></div>
+
+<script>
+const starterFoods = [
+ {id:1,name:"Veg Rice",category:"Meals",description:"Freshly prepared vegetable rice.",quantity:"4 meal boxes",location:"Tirupati",contact:"",expiry:"",emoji:"🍛",time:"Just now"},
+ {id:2,name:"Fresh Fruits",category:"Fruits",description:"Fresh fruits ready to share.",quantity:"2 baskets",location:"Chittoor",contact:"",expiry:"",emoji:"🍎",time:"Today"},
+ {id:3,name:"Sandwiches",category:"Snacks",description:"Extra sandwiches, packed neatly.",quantity:"6 pieces",location:"SV College",contact:"",expiry:"",emoji:"🥪",time:"Today"},
+ {id:4,name:"Idli & Sambar",category:"Meals",description:"A simple, filling meal to share.",quantity:"5 portions",location:"Tirupati",contact:"",expiry:"",emoji:"🥘",time:"Today"}
+];
+
+let foods = [];
+try {
+ foods = JSON.parse(localStorage.getItem("sharebiteFoods")) || starterFoods;
+} catch(e) { foods = starterFoods; }
+let category = "All";
+const emojis = {Meals:"🍱",Fruits:"🍎",Snacks:"🥪",Other:"🥛"};
+
+function saveFoods(){
+ try { localStorage.setItem("sharebiteFoods",JSON.stringify(foods)); }
+ catch(e){showNotice("Storage is full. Try using a smaller image.");}
+}
+
+function safeText(value){
+ return String(value ?? "").replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ })[c]);
+}
+
+function renderFoods(){
+ const query = document.getElementById("search").value.trim().toLowerCase();
+ const filtered = foods.filter(f=>
+ (category==="All"||f.category===category) &&
+ [f.name,f.location,f.description,f.category].some(v=>String(v||"").toLowerCase().includes(query))
+ );
+ document.getElementById("count").textContent=foods.length+" food posts";
+ const grid=document.getElementById("foodGrid");
+ if(!filtered.length){
+  grid.innerHTML='<div class="empty"><div style="font-size:55px">🧺</div><h3>No food posts found</h3><p class="muted">Try another search or share some food!</p><button class="btn" onclick="openForm()">＋ Share Food</button></div>';
+  return;
+ }
+ grid.innerHTML=filtered.map(f=>`
+ <article class="card">
+  <div class="food-img">
+   ${f.photo?`<img src="${f.photo}" alt="${safeText(f.name)}">`:safeText(f.emoji||emojis[f.category]||"🥗")}
+   <span class="tag">${safeText(f.category)}</span>
+  </div>
+  <div class="card-body">
+   <h3>${safeText(f.name)}</h3>
+   <div class="info">📍 ${safeText(f.location)}</div>
+   <div class="info">🍽️ ${safeText(f.quantity)}</div>
+   <div class="info">🕒 ${safeText(f.time||"Recently shared")}</div>
+   <p class="muted">${safeText(f.description||"Shared with kindness 💚")}</p>
+   <div class="card-actions">
+    <button class="btn" onclick="requestFood(${Number(f.id)})">💚 I'm Interested</button>
+    <button class="btn btn-light" onclick="deleteFood(${Number(f.id)})">Remove</button>
+   </div>
+  </div>
+ </article>`).join("");
+}
+
+function setCategory(value,button){
+ category=value;
+ document.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
+ button.classList.add("active");
+ renderFoods();
+}
+
+function openForm(){
+ document.getElementById("foodModal").classList.add("show");
+}
+function closeForm(){
+ document.getElementById("foodModal").classList.remove("show");
+ document.getElementById("foodForm").reset();
+}
+function showNotice(message){
+ const n=document.getElementById("notice");
+ n.textContent=message;
+ n.style.display="block";
+ setTimeout(()=>n.style.display="none",3000);
+}
+
+function requestFood(id){
+ const f=foods.find(item=>item.id===id);
+ if(!f)return;
+ if(f.contact){
+  showNotice("Contact the food donor: "+f.contact);
+ } else {
+  showNotice("Food details ready! Contact feature needs a donor contact.");
+ }
+}
+
+function deleteFood(id){
+ if(!confirm("Remove this food post from this browser?"))return;
+ foods=foods.filter(f=>f.id!==id);
+ saveFoods();
+ renderFoods();
+ showNotice("Food post removed.");
+}
+
+document.getElementById("foodForm").addEventListener("submit",async function(e){
+ e.preventDefault();
+ const form=this;
+ const data=new FormData(form);
+ const file=data.get("photo");
+ let photo="";
+ if(file && file.size>0){
+  if(file.size>700000){
+   showNotice("Please choose an image smaller than 700 KB.");
+   return;
+  }
+  photo=await new Promise((resolve,reject)=>{
+   const reader=new FileReader();
+   reader.onload=()=>resolve(reader.result);
+   reader.onerror=reject;
+   reader.readAsDataURL(file);
+  }).catch(()=> "");
+ }
+ const expiry=data.get("expiry");
+ if(expiry && new Date(expiry)<=new Date()){
+  showNotice("Please choose a future expiry time.");
+  return;
+ }
+ const food={
+  id:Date.now(),
+  name:data.get("name").trim(),
+  category:data.get("category"),
+  description:data.get("description").trim(),
+  quantity:data.get("quantity").trim(),
+  location:data.get("location").trim(),
+  contact:data.get("contact").trim(),
+  expiry:expiry,
+  photo:photo,
+  emoji:emojis[data.get("category")]||"🥗",
+  time:"Just now"
+ };
+ foods.unshift(food);
+ saveFoods();
+ form.reset();
+ closeForm();
+ category="All";
+ document.querySelectorAll(".chip").forEach(c=>{
+  c.classList.toggle("active",c.textContent.includes("All Food"));
+ });
+ document.getElementById("search").value="";
+ renderFoods();
+ document.getElementById("foods").scrollIntoView({behavior:"smooth"});
+ showNotice("Your food post was added successfully! 💚");
+});
+
+document.getElementById("foodModal").addEventListener("click",function(e){
+ if(e.target===this)closeForm();
+});
+
+renderFoods();
+</script>
+</body>
+</html>
