@@ -1,80 +1,108 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Anna Daatha - Modal</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mig-gaddi — Share leftover food</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap">
 <style>
-body{margin:0;font-family:Arial;background:#fff7e6}
-header{background:#ff6b00;color:white;padding:15px;text-align:center;font-size:22px;font-weight:bold}
-.main{max-width:600px;margin:auto;padding:15px}
-.topBtn{background:#ff6b00;color:white;padding:14px;width:100%;border:0;border-radius:10px;font-size:18px;font-weight:bold}
-.card{background:white;padding:12px;border-radius:10px;margin:10px 0;box-shadow:0 2px 6px #0002;border-left:5px solid #ff6b00}
-/* MODAL */
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);justify-content:center;align-items:center}
-.modalBox{background:white;width:90%;max-width:400px;padding:20px;border-radius:12px}
-input{width:100%;padding:11px;margin:7px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
-.btn{width:100%;padding:12px;border:0;border-radius:8px;font-weight:bold;margin-top:8px}
-.orange{background:#ff6b00;color:white}
-.gray{background:#ddd}
-.green{background:green;color:white}
+:root{--bg:#f5f8ee;--surface:#ffffff;--ink:#1c2a22;--muted:#5d6e63;--line:#d8e0cf;--leaf:#2b7a4b;--leaf-ink:#ffffff;--mari:#f0a92b;--chili:#c0392b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13201a;--surface:#1c2c24;--ink:#eef4e6;--muted:#9db1a2;--line:#2f4439;--leaf:#5cc487;--leaf-ink:#0e1a13;--mari:#f2b64a;--chili:#ef7b6d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#13201a;--surface:#1c2c24;--ink:#eef4e6;--muted:#9db1a2;--line:#2f4439;--leaf:#5cc487;--leaf-ink:#0e1a13;--mari:#f2b64a;--chili:#ef7b6d;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.5}
+main{max-width:640px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:clamp(2rem,8vw,3rem);line-height:1.02;margin:8px 0 6px;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--muted);margin:0 0 20px;max-width:46ch}
+form{background:var(--surface);border:2px solid var(--ink);border-radius:14px;padding:14px;display:grid;gap:10px}
+label{font-size:.85rem;font-weight:600;display:grid;gap:4px}
+input,select{font:inherit;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--mari);outline-offset:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{font:inherit;font-weight:600;cursor:pointer;border-radius:10px;border:0;padding:12px 16px}
+.post{background:var(--leaf);color:var(--leaf-ink)}
+.chips{display:flex;gap:8px;margin:22px 0 12px;flex-wrap:wrap}
+.chip{background:transparent;border:1px solid var(--line);color:var(--ink);padding:6px 14px;border-radius:99px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.list{display:grid;gap:12px;padding:0;margin:0;list-style:none}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:8px}
+.card.done{opacity:.55}
+.top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.name{font-weight:800;font-size:1.15rem;margin:0}
+.tag{font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:99px;border:1px solid currentColor;white-space:nowrap}
+.veg{color:var(--leaf)}.nonveg{color:var(--chili)}
+.meta{color:var(--muted);font-size:.9rem;margin:0}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--mari);transition:width .4s}
+.bar>i.low{background:var(--chili)}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.9rem}
+.claim{background:var(--ink);color:var(--bg);padding:8px 14px}
+.empty{color:var(--muted);text-align:center;padding:28px 0}
 </style>
 </head>
 <body>
+<main>
+<h1>Waste cheyyakandi, share cheyyandi.</h1>
+<p class="sub">Leftover food undi aa? Post chesi, daggarlo unna vallaki ivvandi. Fresh ga unnappude.</p>
 
-<header>🍱 Anna Daatha<br><small style="font-size:14px">Modal Model - Unlimited</small></header>
-
-<div class="main">
-<button class="topBtn" onclick="openModal()">+ Share Your Food</button>
-<h3>Available Foods: <span id="count">0</span></h3>
-<div id="foodList"><p>No foods yet</p></div>
+<form id="f">
+<label>Food item<input name="name" required maxlength="50" placeholder="e.g. Veg biryani, 6 plates"></label>
+<div class="row">
+<label>Portions<input name="qty" type="number" min="1" max="200" value="4" required></label>
+<label>Type<select name="type"><option value="veg">Veg</option><option value="nonveg">Non-veg</option></select></label>
 </div>
+<label>Pickup place<input name="place" required maxlength="60" placeholder="e.g. Gate 2, Sai Nagar Colony"></label>
+<label>Good for<select name="hrs"><option value="1">1 hour</option><option value="2" selected>2 hours</option><option value="4">4 hours</option><option value="8">8 hours</option></select></label>
+<button class="post" type="submit">Post food</button>
+</form>
 
-<!-- MODAL POPUP -->
-<div id="myModal" class="modal">
-  <div class="modalBox">
-    <h3>Add Food</h3>
-    <input id="fName" placeholder="Dish Name *">
-    <input id="fLoc" placeholder="Location *">
-    <input id="fQty" placeholder="Quantity">
-    <input id="fPhone" placeholder="Phone Number">
-    <button class="btn orange" onclick="saveFood()">Share Now</button>
-    <button class="btn gray" onclick="closeModal()">Cancel</button>
-    <p id="err" style="color:red;text-align:center"></p>
-  </div>
+<div class="chips" role="group" aria-label="Filter">
+<button class="chip" data-f="all" aria-pressed="true">All</button>
+<button class="chip" data-f="veg" aria-pressed="false">Veg</button>
+<button class="chip" data-f="nonveg" aria-pressed="false">Non-veg</button>
 </div>
+<ul class="list" id="list"></ul>
+</main>
 
 <script>
-var foods = [];
-function openModal(){ document.getElementById('myModal').style.display='flex'; }
-function closeModal(){ document.getElementById('myModal').style.display='none'; document.getElementById('err').innerText=''; }
-function saveFood(){
-  var n = document.getElementById('fName').value.trim();
-  var l = document.getElementById('fLoc').value.trim();
-  var q = document.getElementById('fQty').value.trim();
-  var p = document.getElementById('fPhone').value.trim();
-  if(n=='' || l==''){ document.getElementById('err').innerText='Dish & Location required!'; return; }
-  foods.unshift({name:n, loc:l, qty:q||'1 plate', phone:p||'No phone', time:new Date().toLocaleTimeString()});
-  document.getElementById('fName').value=''; document.getElementById('fLoc').value=''; document.getElementById('fQty').value=''; document.getElementById('fPhone').value='';
-  closeModal();
-  render();
-}
+(function(){
+var KEY='leftover-share-v1',filter='all',items=[];
+function load(){try{var r=localStorage.getItem(KEY);if(r)return JSON.parse(r)}catch(e){}return null}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){}}
+function now(){return Date.now()}
+var H=3600000;
+items=load()||[
+{id:1,name:'Chapati + dal',qty:8,type:'veg',place:'Temple road, near bus stop',start:now()-H*0.5,end:now()+H*1.5,claimed:false},
+{id:2,name:'Chicken fried rice',qty:3,type:'nonveg',place:'Hostel Block B gate',start:now()-H*1.6,end:now()+H*0.4,claimed:false}
+];
+var list=document.getElementById('list');
+function left(ms){var m=Math.max(0,Math.round(ms/60000));return m>=60?Math.floor(m/60)+'h '+(m%60)+'m left':m+' min left'}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
 function render(){
-  document.getElementById('count').innerText = foods.length;
-  var html = '';
-  if(foods.length==0){ html='<p>No foods yet, be first!</p>'; }
-  else{
-    for(var i=0;i<foods.length;i++){
-      var f = foods[i];
-      html += '<div class="card"><b>🍛 '+f.name+'</b><br>📍 '+f.loc+' | '+f.qty+'<br>📞 '+f.phone+'<br><small>'+f.time+'</small><br><button class="btn green" onclick="alert(\'Contact: '+f.phone+'\')">Claim This Food</button></div>';
-    }
-  }
-  document.getElementById('foodList').innerHTML = html;
-}
-render();
-// close modal if click outside
-window.onclick = function(e){ if(e.target==document.getElementById('myModal')){ closeModal(); } }
+var t=now();list.innerHTML='';
+var shown=items.filter(function(i){return i.end>t&&(filter==='all'||i.type===filter)}).sort(function(a,b){return a.end-b.end});
+if(!shown.length){list.appendChild(el('li','empty','No food posted right now. Post the first one above.'));return}
+shown.forEach(function(i){
+var li=el('li','card'+(i.claimed?' done':''));
+var top=el('div','top');top.appendChild(el('h3','name',i.name));
+top.appendChild(el('span','tag '+i.type,i.type==='veg'?'Veg':'Non-veg'));li.appendChild(top);
+li.appendChild(el('p','meta',i.qty+' portions · '+i.place));
+var pct=Math.max(0,Math.min(100,(i.end-t)/(i.end-i.start)*100));
+var bar=el('div','bar');var fill=el('i',pct<25?'low':'');fill.style.width=pct+'%';bar.appendChild(fill);li.appendChild(bar);
+var foot=el('div','foot');foot.appendChild(el('span','',i.claimed?'Claimed':left(i.end-t)));
+if(!i.claimed){var b=el('button','claim','I\'ll take it');b.onclick=function(){i.claimed=true;save();render()};foot.appendChild(b)}
+li.appendChild(foot);list.appendChild(li)
+})}
+document.getElementById('f').addEventListener('submit',function(e){
+e.preventDefault();var d=new FormData(e.target),t=now();
+items.push({id:t,name:d.get('name').trim(),qty:+d.get('qty'),type:d.get('type'),place:d.get('place').trim(),start:t,end:t+(+d.get('hrs'))*H,claimed:false});
+save();e.target.reset();render()});
+document.querySelectorAll('.chip').forEach(function(c){c.onclick=function(){
+filter=c.dataset.f;document.querySelectorAll('.chip').forEach(function(x){x.setAttribute('aria-pressed',x===c)});render()}});
+render();setInterval(render,30000);
+})();
 </script>
-
 </body>
 </html>
