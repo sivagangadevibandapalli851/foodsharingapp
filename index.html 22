@@ -1,14 +1,80 @@
-<h2>Test - Share Food</h2>
-<input id="n" placeholder="Dish Name">
-<input id="l" placeholder="Location">
-<button onclick="add()">Share Now</button>
-<div id="list"></div>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anna Daatha - Modal</title>
+<style>
+body{margin:0;font-family:Arial;background:#fff7e6}
+header{background:#ff6b00;color:white;padding:15px;text-align:center;font-size:22px;font-weight:bold}
+.main{max-width:600px;margin:auto;padding:15px}
+.topBtn{background:#ff6b00;color:white;padding:14px;width:100%;border:0;border-radius:10px;font-size:18px;font-weight:bold}
+.card{background:white;padding:12px;border-radius:10px;margin:10px 0;box-shadow:0 2px 6px #0002;border-left:5px solid #ff6b00}
+/* MODAL */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);justify-content:center;align-items:center}
+.modalBox{background:white;width:90%;max-width:400px;padding:20px;border-radius:12px}
+input{width:100%;padding:11px;margin:7px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
+.btn{width:100%;padding:12px;border:0;border-radius:8px;font-weight:bold;margin-top:8px}
+.orange{background:#ff6b00;color:white}
+.gray{background:#ddd}
+.green{background:green;color:white}
+</style>
+</head>
+<body>
+
+<header>🍱 Anna Daatha<br><small style="font-size:14px">Modal Model - Unlimited</small></header>
+
+<div class="main">
+<button class="topBtn" onclick="openModal()">+ Share Your Food</button>
+<h3>Available Foods: <span id="count">0</span></h3>
+<div id="foodList"><p>No foods yet</p></div>
+</div>
+
+<!-- MODAL POPUP -->
+<div id="myModal" class="modal">
+  <div class="modalBox">
+    <h3>Add Food</h3>
+    <input id="fName" placeholder="Dish Name *">
+    <input id="fLoc" placeholder="Location *">
+    <input id="fQty" placeholder="Quantity">
+    <input id="fPhone" placeholder="Phone Number">
+    <button class="btn orange" onclick="saveFood()">Share Now</button>
+    <button class="btn gray" onclick="closeModal()">Cancel</button>
+    <p id="err" style="color:red;text-align:center"></p>
+  </div>
+</div>
+
 <script>
-function add(){
-  var name=document.getElementById('n').value;
-  var loc=document.getElementById('l').value;
-  if(!name||!loc){alert('Name & Location pettu');return;}
-  document.getElementById('list').innerHTML += '<p>🍛 '+name+' - 📍 '+loc+'</p>';
-  alert('Added! '+name);
+var foods = [];
+function openModal(){ document.getElementById('myModal').style.display='flex'; }
+function closeModal(){ document.getElementById('myModal').style.display='none'; document.getElementById('err').innerText=''; }
+function saveFood(){
+  var n = document.getElementById('fName').value.trim();
+  var l = document.getElementById('fLoc').value.trim();
+  var q = document.getElementById('fQty').value.trim();
+  var p = document.getElementById('fPhone').value.trim();
+  if(n=='' || l==''){ document.getElementById('err').innerText='Dish & Location required!'; return; }
+  foods.unshift({name:n, loc:l, qty:q||'1 plate', phone:p||'No phone', time:new Date().toLocaleTimeString()});
+  document.getElementById('fName').value=''; document.getElementById('fLoc').value=''; document.getElementById('fQty').value=''; document.getElementById('fPhone').value='';
+  closeModal();
+  render();
 }
+function render(){
+  document.getElementById('count').innerText = foods.length;
+  var html = '';
+  if(foods.length==0){ html='<p>No foods yet, be first!</p>'; }
+  else{
+    for(var i=0;i<foods.length;i++){
+      var f = foods[i];
+      html += '<div class="card"><b>🍛 '+f.name+'</b><br>📍 '+f.loc+' | '+f.qty+'<br>📞 '+f.phone+'<br><small>'+f.time+'</small><br><button class="btn green" onclick="alert(\'Contact: '+f.phone+'\')">Claim This Food</button></div>';
+    }
+  }
+  document.getElementById('foodList').innerHTML = html;
+}
+render();
+// close modal if click outside
+window.onclick = function(e){ if(e.target==document.getElementById('myModal')){ closeModal(); } }
 </script>
+
+</body>
+</html>
